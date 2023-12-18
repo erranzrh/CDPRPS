@@ -11,8 +11,8 @@ public class Patient extends User {
     public Patient() {
     }
 
-    public Patient(String userId, String name, String password, String contact, String role, String sensorDataId, String address, String emergencyContact, String assigned_doctor, String status) {
-        super(userId, name, password, contact, role);
+    public Patient(String userId, String name, String password, String contact, String role, String email, String sensorDataId, String address, String emergencyContact, String assigned_doctor, String status) {
+        super(userId, name, password, contact, role, email);
         this.sensorDataId = sensorDataId;
         this.address = address;
         this.emergencyContact = emergencyContact;
@@ -20,8 +20,8 @@ public class Patient extends User {
         this.status = status;
     }
 
-    public Patient(String userId, String name, String password, String contact, String role, String sensorDataId, String address, String emergencyContact, String assigned_doctor) {
-        super(userId, name, password, contact, role);
+    public Patient(String userId, String name, String password, String contact, String role, String email, String sensorDataId, String address, String emergencyContact, String assigned_doctor) {
+        super(userId, name, password, contact, role, email);
         this.sensorDataId = sensorDataId;
         this.address = address;
         this.emergencyContact = emergencyContact;
@@ -29,8 +29,8 @@ public class Patient extends User {
 
     }
 
-    public Patient(String userId, String name, String password, String contact, String role, String address, String emergencyContact,String sensorDataId) {
-        super(userId, name, password, contact, role);
+    public Patient(String userId, String name, String password, String contact, String role, String email, String address, String emergencyContact,String sensorDataId) {
+        super(userId, name, password, contact, role, email);
         this.address = address;
         this.emergencyContact = emergencyContact;
         this.sensorDataId=sensorDataId;

@@ -52,6 +52,7 @@ public class PatientRepository implements SHSRDAO<Patient> {
             tempPatient.setPassword(user.getPassword());
             tempPatient.setContact(user.getContact());
             tempPatient.setRole(user.getRole());
+            tempPatient.setEmail(user.getEmail());
             return tempPatient;
         } else {
             return null;
@@ -78,6 +79,7 @@ public class PatientRepository implements SHSRDAO<Patient> {
             patient.setName(user.getName());
             patient.setContact(user.getContact());
             patient.setRole(user.getRole());
+            patient.setEmail(user.getEmail());
             patientList.add(patient);
         }
 
@@ -96,7 +98,7 @@ public class PatientRepository implements SHSRDAO<Patient> {
 
 
         //Create a temporary User
-        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole());
+        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole(), patient.getEmail());
         userRepository.save(user);
 
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(patient.getUserId()).set(tempPatient);
@@ -152,7 +154,7 @@ public class PatientRepository implements SHSRDAO<Patient> {
             dbFirestore.collection(COL_NAME).document(patient.getUserId()).update("contact", patient.getContact());
         }
 
-        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole());
+        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole(), patient.getEmail());
         return userRepository.update(user);
     } 
  
@@ -163,9 +165,6 @@ public class PatientRepository implements SHSRDAO<Patient> {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         Patient patient = get(patientId);
      
-        
-       
-
         //delete sensor from sensor table
         //since patient and sensor is 1-to-1 composition relation,
         //delete the patient will also delete the sensor
@@ -174,7 +173,6 @@ public class PatientRepository implements SHSRDAO<Patient> {
              timeDeleteUser = userRepository.delete(patientId);
              return "Document with Patient Id " + patientId + " has been deleted. " + "\n";// + timeDeleteUser;
             // messageSensor = "sensor is not included";
-
             
             //since patient doesn't have sensorId, we are not deleting the sensor from sensor database table
         } else {
