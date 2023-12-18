@@ -30,13 +30,17 @@ public class registerPatientController {
 
     @PostMapping("/submit")
     public String registerPatient(
-            @RequestParam("fullname")String fullName,@RequestParam("id")String id,
-            @RequestParam("password")String password, @RequestParam("phone")String phoneNum,
-            @RequestParam("address")String address, @RequestParam("emergency")String emergency,
+            @RequestParam("fullname")String fullName,
+            @RequestParam("id")String id,
+            @RequestParam("password")String password, 
+            @RequestParam("phone")String phoneNum,
+            @RequestParam("address")String address, 
+            @RequestParam("emergency")String emergency,
+            @RequestParam("email")String email,
             @RequestParam("role")String role, Model model) throws ExecutionException, InterruptedException {
 
         String status= "Under Surveillance";
-        Patient newPatient=new Patient(id,fullName,password,phoneNum,role,"",address,emergency,"",status);
+        Patient newPatient=new Patient(id,fullName,password,phoneNum,role,email,address,emergency,"",status);
         patientService.createPatient(newPatient);
 
         return "login";
