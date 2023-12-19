@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
@@ -92,6 +93,16 @@ public class PatientService {
     public List<Patient> getPatientList() throws ExecutionException, InterruptedException {
         return patientRepository.getAll();
     }
+
+    public List<Patient> searchPatients(String keyword) throws ExecutionException, InterruptedException {
+    List<Patient> allPatients = patientRepository.getAll();  // Fetch all patients
+
+    return allPatients.stream()
+            .filter(patient -> patient.getUserId().toLowerCase().contains(keyword.toLowerCase())
+                    || patient.getName().toLowerCase().contains(keyword.toLowerCase())
+                    || patient.getContact().toLowerCase().contains(keyword.toLowerCase()))
+            .collect(Collectors.toList());
+}
 
 
 }

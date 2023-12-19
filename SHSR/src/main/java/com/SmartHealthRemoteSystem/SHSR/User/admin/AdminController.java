@@ -29,16 +29,65 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getAdminDashboard(Model model) throws ExecutionException, InterruptedException {
+    public String getAdminDashboard(
+            Model model,
+            @RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo
+    ) throws ExecutionException, InterruptedException {
         List<User> adminList = userService.getAdminList();
         List<Patient> patientList = patientService.getPatientList();
         List<Doctor> doctorList = doctorService.getListDoctor();
-        model.addAttribute("adminList", adminList);
-        model.addAttribute("patientList", patientList);
-        model.addAttribute("doctorList", doctorList);
+    
+        // Set Pagination details for each list
+        PaginationInfo patientPagination = getPaginationInfo(patientList, pageNo);
+        PaginationInfo adminPagination = getPaginationInfo(adminList, pageNo);
+        PaginationInfo doctorPagination = getPaginationInfo(doctorList, pageNo);
+        // Add data and pagination details to the model
+       
+        model.addAttribute("patientList", patientPagination.getDataToDisplay());
+        model.addAttribute("patientPagination", patientPagination);
+        model.addAttribute("adminList", adminPagination.getDataToDisplay());
+        model.addAttribute("adminPagination", adminPagination);
+        model.addAttribute("doctorList", doctorPagination.getDataToDisplay());
+        model.addAttribute("doctorPagination", doctorPagination);
+        
+        
         return "adminDashboard";
     }
-
+    
+    @GetMapping("/search/patients")
+    public String searchPatients(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+        List<Patient> patientList = patientService.searchPatients(query);
+        PaginationInfo patientPagination = getPaginationInfo(patientList, 1);
+    
+        model.addAttribute("patientList", patientPagination.getDataToDisplay());
+        model.addAttribute("patientPagination", patientPagination);
+    
+        return "adminDashboard :: patientTable"; // Return only the patientTable fragment
+    }
+    
+    @GetMapping("/search/admins")
+    public String searchAdmins(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+        List<User> adminList = userService.searchUsers(query);
+        PaginationInfo adminPagination = getPaginationInfo(adminList, 1);
+    
+        model.addAttribute("adminList", adminPagination.getDataToDisplay());
+        model.addAttribute("adminPagination", adminPagination);
+    
+        return "adminDashboard :: adminTable"; // Return only the adminTable
+    }
+    
+    @GetMapping("/search/doctors")
+    public String searchDoctors(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+        List<Doctor> doctorList = doctorService.searchDoctors(query);
+        PaginationInfo doctorPagination = getPaginationInfo(doctorList, 1);
+    
+        model.addAttribute("doctorList", doctorPagination.getDataToDisplay());
+        model.addAttribute("doctorPagination", doctorPagination);
+    
+        return "adminDashboard :: doctorTable"; // Return only the doctorTable
+    }
+    
+    
     @PostMapping("/adduser")
     public String saveUserInformation(@RequestParam(value = "userId") String id,
                                       @RequestParam(value = "userFullName") String name,
@@ -105,5 +154,24 @@ public class AdminController {
         model.addAttribute("patientList", patientList);
         model.addAttribute("doctorList", doctorList);
         return "adminDashboard";
+    }
+
+    private PaginationInfo getPaginationInfo(List<?> dataList, int pageNo){
+        int pageSize = 5;
+        int totalItems = dataList.size();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+    
+        // Adjust pageNo to be within valid bounds
+        pageNo = Math.max(1, Math.min(pageNo, totalPages));
+    
+        int start = (pageNo - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalItems);
+    
+        List<?> dataToDisplay = dataList.subList(start, end);
+    
+        int prevPage = Math.max(1, pageNo - 1);
+        int nextPage = Math.min(totalPages, pageNo + 1);
+    
+        return new PaginationInfo(dataToDisplay, pageSize, pageNo, totalPages, prevPage, nextPage);
     }
 }
