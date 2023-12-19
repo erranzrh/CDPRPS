@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
@@ -108,6 +109,13 @@ public class DoctorService {
 
     public Patient getPatient(String patientId) throws ExecutionException, InterruptedException {
         return patientRepository.get(patientId);
+    }
+     public List<Doctor> searchDoctors(String keyword) throws ExecutionException, InterruptedException {
+        List<Doctor> allDoctors = doctorRepository.getAll();
+
+        return allDoctors.stream()
+                .filter(user -> user.getUserId().contains(keyword) || user.getName().contains(keyword)) // adjust fields as needed
+                .collect(Collectors.toList());
     }
 
 }
