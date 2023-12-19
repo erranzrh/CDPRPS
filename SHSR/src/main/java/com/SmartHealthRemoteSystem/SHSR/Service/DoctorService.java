@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
@@ -28,7 +29,7 @@ public class DoctorService {
     public String createDoctor(Doctor doctor) throws ExecutionException, InterruptedException {
         boolean checkUserExist = false;
         //create a temporary user
-        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole());
+        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole(), doctor.getEmail());
 
         //get list of all user
         List<User> userList = userRepository.getAll();
@@ -53,6 +54,7 @@ public class DoctorService {
     }
   
     public Doctor getDoctor(String doctorId) throws ExecutionException, InterruptedException {
+        
         if(doctorId.isEmpty()){
             return new Doctor();
         }
@@ -66,6 +68,7 @@ public class DoctorService {
             doctor.setContact(user.getContact());
             doctor.setRole(user.getRole());
             doctor.setUserId(user.getUserId());
+            doctor.setEmail(user.getEmail());
             return doctor;
         }
     }
@@ -91,6 +94,7 @@ public class DoctorService {
         }
         return patientList;
     }
+    
     public List<Patient> getListPatient() throws ExecutionException, InterruptedException {
         //function to return list of unassigned patient
         List<Patient> patients=patientRepository.getAll();
@@ -105,6 +109,13 @@ public class DoctorService {
 
     public Patient getPatient(String patientId) throws ExecutionException, InterruptedException {
         return patientRepository.get(patientId);
+    }
+     public List<Doctor> searchDoctors(String keyword) throws ExecutionException, InterruptedException {
+        List<Doctor> allDoctors = doctorRepository.getAll();
+
+        return allDoctors.stream()
+                .filter(user -> user.getUserId().contains(keyword) || user.getName().contains(keyword)) // adjust fields as needed
+                .collect(Collectors.toList());
     }
 
 }

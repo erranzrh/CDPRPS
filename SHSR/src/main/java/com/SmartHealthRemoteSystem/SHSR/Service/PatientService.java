@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
@@ -35,7 +36,7 @@ public class PatientService {
     public String createPatient(Patient patient) throws ExecutionException, InterruptedException {
         boolean checkUserExist = false;
         //Create a temporary User
-        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole());
+        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole(), patient.getEmail());
         //get list of all user
         List<User> userList = userRepository.getAll();
         for(User u: userList){
@@ -83,7 +84,7 @@ public class PatientService {
         }
 
         return prescription;
-    }
+    } 
 
     public List<Prescription> getAllPrescription(String patientId) throws ExecutionException, InterruptedException {
         return prescriptionRepository.getAll(patientId);
@@ -92,6 +93,15 @@ public class PatientService {
     public List<Patient> getPatientList() throws ExecutionException, InterruptedException {
         return patientRepository.getAll();
     }
+    public List<Patient> searchPatients(String keyword) throws ExecutionException, InterruptedException {
+    List<Patient> allPatients = patientRepository.getAll();  // Fetch all patients
+
+    return allPatients.stream()
+            .filter(patient -> patient.getUserId().toLowerCase().contains(keyword.toLowerCase())
+                    || patient.getName().toLowerCase().contains(keyword.toLowerCase())
+                    || patient.getContact().toLowerCase().contains(keyword.toLowerCase()))
+            .collect(Collectors.toList());
+}
 
 
 }
