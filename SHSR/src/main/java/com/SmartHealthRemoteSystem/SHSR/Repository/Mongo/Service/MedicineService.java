@@ -1,5 +1,5 @@
-package com.SmartHealthRemoteSystem.SHSR.Repository.Mongo.Service;
+// package com.SmartHealthRemoteSystem.SHSR.Repository.Mongo.Service;
 
-public class MedicineService {
+// public class MedicineService {
     
-}
+// }
