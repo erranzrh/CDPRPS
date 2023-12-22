@@ -44,7 +44,7 @@
                         <button type="button" class="patientBtn admin_navBtn admin_navBtn_active">Patient</button>
                         <button type="button" class="doctorBtn admin_navBtn">Doctor</button>
                         <button type="button" class="adminBtn admin_navBtn">Admin</button>
-                        
+                        <button type="button" class="pharmacistBtn admin_navBtn">Pharmacist</button>
                         <button type="button" class="asspatBtn admin_navBtn">Assigned Patient</button>
                         
                     </div>
@@ -185,6 +185,45 @@
 <!-- paging button end -->
 
 <!--IZZATI CODE-->
+
+                </div>
+
+                 <!--pharmacist table-->
+                 <div class="user_table">
+                    <table class="table table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">User Id</th>
+                            <button type="button" class="pharmacistBtn admin_navBtn">Pharmacist</button>         <th scope="col">Name</th>
+                            <th scope="col">Contact No</th>
+                            <th scope="col">Email</th>
+
+                            <th scope="col">Role</th>
+                            <th scope="col">Hospital</th>
+                            <th scope="col">Position</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="pharmacistTable">
+                        <!--javascript retrieving all the data from database-->
+                        <tr th:each="pharmacist : ${pharmacistList}">
+                            <th scope="row" th:text="${pharmacistStat.index}+1"></th>
+                            <td th:text="${pharmacist.userId}"></td>
+                            <td th:text="${pharmacist.name}"></td>
+                            <td th:text="${pharmacist.contact}"></td>
+                            <td th:text="${pharmacist.email}"></td>
+
+                            <td th:text="${pharmacist.role}"></td>
+                            <td th:text="${pharmacist.hospital}"></td>
+                            <td th:text="${pharmacist.position}"></td>
+                            <td>
+                                <button type="button" class="btn btn-warning editUserBtn editPharmacist">Edit</button>
+                                <button type="button" class="btn btn-danger deleteUserBtn">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <!--Admin Table-->
                 <div class="user_table">
@@ -194,7 +233,7 @@
 </div>
 <!-- search bar admin -->
 <!-- search button admin-->
-                    <table class="table table table-striped">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">No</th>
@@ -206,7 +245,7 @@
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
-                        <tbody id="adminTable">
+                        <tbody id="adminTable" class="adminTable">
                         <!--javascript retrieving all the data from database-->
                         <tr th:each="admin, stat: ${adminPagination.dataToDisplay}">
                             <th scope="row" th:text="${stat.index + 1 + (adminPagination.totalPage * (adminPagination.currentPage - 1))}"></th>
