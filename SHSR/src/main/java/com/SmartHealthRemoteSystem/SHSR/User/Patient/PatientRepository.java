@@ -67,20 +67,28 @@ public class PatientRepository implements SHSRDAO<Patient> {
 
         List<Patient> patientList = new ArrayList<>();
         Patient patient;
+
         while (iterator.hasNext()) {
             DocumentReference documentReference1 = iterator.next();
             ApiFuture<DocumentSnapshot> future = documentReference1.get();
             DocumentSnapshot document = future.get();
             patient = document.toObject(Patient.class);
-            User user = userRepository.get(document.getId());
-            assert patient != null;
-            patient.setUserId(user.getUserId());
-            patient.setPassword(user.getPassword());
-            patient.setName(user.getName());
-            patient.setContact(user.getContact());
-            patient.setRole(user.getRole());
-            patient.setEmail(user.getEmail());
-            patientList.add(patient);
+        
+            if (patient != null) {
+                User user = userRepository.get(document.getId());
+                patient.setUserId(user.getUserId());
+                patient.setPassword(user.getPassword());
+                patient.setName(user.getName());
+                patient.setContact(user.getContact());
+                patient.setRole(user.getRole());
+                patient.setEmail(user.getEmail());
+                patientList.add(patient);
+            } else {
+                // Handle the case where the document doesn't contain a Patient object.
+                // You might want to log a message or take appropriate action.
+                // For example, you can log a warning:
+                System.out.println("Warning: Document with ID " + document.getId() + " does not contain a Patient object.");
+            }
         }
 
         return patientList;
