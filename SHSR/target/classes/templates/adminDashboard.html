@@ -319,11 +319,12 @@
         </div>
 
 
+        <!--add user page-->
         <div class="add_user_page">
             <div class="add_user_page-content">
                 <h4 class="add_user_page-title">User Form</h4>
                 <h4 class="add_user_page-title">Update User</h4>
-                <form th:action="@{/admin/adduser}"  method="post" name="adduser" id="adduser">
+                <form th:action="@{/admin/adduser}"  method="post" name="addUserForm" id="addUserForm">
                     <input type="hidden" class="form-control" id="action" name="action" >
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -335,21 +336,12 @@
                             <label for="userFullName">Name</label>
                             <input type="text" class="form-control" id="userFullName" name="userFullName" placeholder="Full name">
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="user">Password</label>
-                            <input type="text" class="form-control" id="userPassword" name="userPassword" placeholder="User Temp Password">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="user">Email</label>
-                            <input type="text" class="form-control" id="userEmail" name="userEmail" placeholder="User Email">
-                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="contact">Contact</label>
                         <input type="text" class="form-control" id="contact" name="contact" placeholder="012-3456789">
                     </div>
-                    
                     <div class="d-flex justify-content-around pt-2 pb-2">
                         <div class="form-check radioBtn">
                             <input class="form-check-input admin" type="radio" name="role" id="admin" value="ADMIN"
@@ -369,12 +361,6 @@
                             <input class="form-check-input doctor" type="radio" name="role" id="doctor" value="DOCTOR">
                             <label class="form-check-label" for="doctor">
                                 Doctor
-                            </label>
-                        </div>
-                        <div class="form-check radioBtn">
-                            <input class="form-check-input pharmacist" type="radio" name="role" id="pharmacist" value="PHARMACIST">
-                            <label class="form-check-label" for="pharmacist">
-                                Pharmacist
                             </label>
                         </div>
                     </div>
@@ -398,7 +384,7 @@
                     <div class="extraForm form-group">
                         <div class="form-group">
                             <label for="hospital">Hospital</label>
-                            <input type="text" class="form-control" id="doctorHospital" name="doctorHospital"
+                            <input type="text" class="form-control" id="hospital" name="hospital"
                                    placeholder="Current Hospital">
                         </div>
                         <div class="form-group">
@@ -407,29 +393,11 @@
                                    placeholder="Medical officer">
                         </div>
                     </div>
-
-                    <div class="extraForm form-group">
-                        <div class="form-group">
-                            <label for="hospital">Hospital</label>
-                            <input type="text" class="form-control" id="pharmacistHospital" name="pharmacistHospital"
-                                   placeholder="Current Hospital">
-                        </div>
-                        <div class="form-group">
-                            <label for="pharmacistPosition">Position</label>
-                            <input type="text" class="form-control" id="pharmacistPosition" name="pharmacistPosition"
-                                   placeholder="Medical officer">
-                        </div>
-                    </div>
-
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-                
+                </form>
                 <div class="add_user_page-buttons">
                     <button type="button" class="btn btn-primary confirmBtn" id="confirmAddUserBtn">Confirm</button>
                     <button type="button" class="btn btn-secondary" id="cancelBtnAddUser">Cancel</button>
                 </div>
-
-            </form>
             </div>
         </div>
 
