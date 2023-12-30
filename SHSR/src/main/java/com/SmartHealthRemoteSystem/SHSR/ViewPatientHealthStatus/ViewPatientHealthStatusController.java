@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
 @Controller
 @RequestMapping("/viewPatientHealthStatus")
 public class ViewPatientHealthStatusController {
-    private final HealthStatusService healthStatusService;
+        private final HealthStatusService healthStatusService;
     private final PatientService patientService;
     private final DoctorService doctorService;
 

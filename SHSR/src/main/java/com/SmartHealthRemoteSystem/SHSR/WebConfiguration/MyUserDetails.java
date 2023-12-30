@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
-    private User user;
+        private User user;
     private List<GrantedAuthority> authorities;
     @Autowired
     private DoctorRepository doctorRepository;

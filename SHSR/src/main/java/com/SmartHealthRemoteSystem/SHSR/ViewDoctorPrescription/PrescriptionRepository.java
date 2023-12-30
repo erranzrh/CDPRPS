@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class PrescriptionRepository implements SubCollectionSHSRDAO<Prescription> {
 
-    public static final String COL_NAME = "Patient";
+        public static final String COL_NAME = "Patient";
     public static final String SUB_COL_NAME = "Prescription";
 
     @Override

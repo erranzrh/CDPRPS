@@ -1,7 +1,7 @@
 package com.SmartHealthRemoteSystem.SHSR.Shsr.ApplicationService;
 
 public class FirebaseCredential {
-    private String type;
+        private String type;
     private String project_id;
     private String private_key_id;
     private String private_key;

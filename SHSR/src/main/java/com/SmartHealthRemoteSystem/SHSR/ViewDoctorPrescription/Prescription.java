@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Prescription {
-    private String prescriptionId;
+        private String prescriptionId;
     private String timestamp;
     private String doctorId;
     private List<String> medicineList;

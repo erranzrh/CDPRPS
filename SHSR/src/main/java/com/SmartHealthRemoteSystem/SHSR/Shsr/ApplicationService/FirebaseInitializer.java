@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 @Service
 public class FirebaseInitializer {
-    private final Environment environment;
+        private final Environment environment;
 
     public FirebaseInitializer(Environment environment) {
         this.environment = environment;

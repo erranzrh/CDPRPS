@@ -15,7 +15,7 @@ public class ShsrApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(ShsrApplication.class, args);
 
-	}
+		}
 }
 
 //trying
