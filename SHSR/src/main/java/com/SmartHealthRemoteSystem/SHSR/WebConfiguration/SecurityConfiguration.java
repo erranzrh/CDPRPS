@@ -19,7 +19,7 @@ import com.SmartHealthRemoteSystem.SHSR.Service.MyUserDetailsService;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
-        private MyUserDetailsService myUserDetailsService;
+    private MyUserDetailsService myUserDetailsService;
     private AuthenticationSuccessHandler successHandler;
 
     @Autowired

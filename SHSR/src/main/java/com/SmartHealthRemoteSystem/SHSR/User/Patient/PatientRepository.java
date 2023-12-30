@@ -52,7 +52,6 @@ public class PatientRepository implements SHSRDAO<Patient> {
             tempPatient.setPassword(user.getPassword());
             tempPatient.setContact(user.getContact());
             tempPatient.setRole(user.getRole());
-            tempPatient.setEmail(user.getEmail());
             return tempPatient;
         } else {
             return null;
@@ -60,35 +59,29 @@ public class PatientRepository implements SHSRDAO<Patient> {
     }
 
     @Override
-public List<Patient> getAll() throws ExecutionException, InterruptedException {
-    Firestore dbFirestore = FirestoreClient.getFirestore();
-    Iterable<DocumentReference> documentReference = dbFirestore.collection(COL_NAME).listDocuments();
-    Iterator<DocumentReference> iterator = documentReference.iterator();
+    public List<Patient> getAll() throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        Iterable<DocumentReference> documentReference = dbFirestore.collection(COL_NAME).listDocuments();
+        Iterator<DocumentReference> iterator = documentReference.iterator();
 
-    List<Patient> patientList = new ArrayList<>();
-    Patient patient;
-    while (iterator.hasNext()) {
-        DocumentReference documentReference1 = iterator.next();
-        ApiFuture<DocumentSnapshot> future = documentReference1.get();
-        DocumentSnapshot document = future.get();
-        patient = document.toObject(Patient.class);
-
-        // Check if user is null before further processing
-        if (patient != null) {
+        List<Patient> patientList = new ArrayList<>();
+        Patient patient;
+        while (iterator.hasNext()) {
+            DocumentReference documentReference1 = iterator.next();
+            ApiFuture<DocumentSnapshot> future = documentReference1.get();
+            DocumentSnapshot document = future.get();
+            patient = document.toObject(Patient.class);
             User user = userRepository.get(document.getId());
-            if (user != null) {
-                patient.setUserId(user.getUserId());
-                patient.setPassword(user.getPassword());
-                patient.setName(user.getName());
-                patient.setContact(user.getContact());
-                patient.setRole(user.getRole());
-                patient.setEmail(user.getEmail());
-                patientList.add(patient);
-            }
+            assert patient != null;
+            patient.setUserId(user.getUserId());
+            patient.setPassword(user.getPassword());
+            patient.setName(user.getName());
+            patient.setContact(user.getContact());
+            patient.setRole(user.getRole());
+            patientList.add(patient);
         }
-    }
 
-    return patientList;
+        return patientList;
     }
 
     @Override
@@ -103,7 +96,7 @@ public List<Patient> getAll() throws ExecutionException, InterruptedException {
 
 
         //Create a temporary User
-        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole(), patient.getEmail());
+        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole());
         userRepository.save(user);
 
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(patient.getUserId()).set(tempPatient);
@@ -159,7 +152,7 @@ public List<Patient> getAll() throws ExecutionException, InterruptedException {
             dbFirestore.collection(COL_NAME).document(patient.getUserId()).update("contact", patient.getContact());
         }
 
-        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole(), patient.getEmail());
+        User user = new User(patient.getUserId(), patient.getName(), patient.getPassword(), patient.getContact(), patient.getRole());
         return userRepository.update(user);
     } 
  
@@ -170,6 +163,9 @@ public List<Patient> getAll() throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         Patient patient = get(patientId);
      
+        
+       
+
         //delete sensor from sensor table
         //since patient and sensor is 1-to-1 composition relation,
         //delete the patient will also delete the sensor
@@ -178,6 +174,7 @@ public List<Patient> getAll() throws ExecutionException, InterruptedException {
              timeDeleteUser = userRepository.delete(patientId);
              return "Document with Patient Id " + patientId + " has been deleted. " + "\n";// + timeDeleteUser;
             // messageSensor = "sensor is not included";
+
             
             //since patient doesn't have sensorId, we are not deleting the sensor from sensor database table
         } else {

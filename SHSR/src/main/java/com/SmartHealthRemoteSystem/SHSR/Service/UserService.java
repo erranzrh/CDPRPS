@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -53,12 +52,5 @@ public class UserService {
             }
         }
         return userList;
-    }
-    public List<User> searchUsers(String keyword) throws ExecutionException, InterruptedException {
-        List<User> allUsers = userRepository.getAll();
-
-        return allUsers.stream()
-                .filter(user -> user.getUserId().contains(keyword) || user.getName().contains(keyword)) // adjust fields as needed
-                .collect(Collectors.toList());
     }
 }

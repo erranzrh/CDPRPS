@@ -20,7 +20,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-            String redirectUrl = null;
+        String redirectUrl = null;
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_DOCTOR")) {
@@ -28,9 +28,6 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
                 break;
             } else if (grantedAuthority.getAuthority().equals("ROLE_PATIENT")) {
                 redirectUrl = "/patient";
-                break;
-            } else if (grantedAuthority.getAuthority().equals("ROLE_PHARMACIST")) {
-                redirectUrl = "/pharmacist";
                 break;
             } else{
                 redirectUrl = "/admin";

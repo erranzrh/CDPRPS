@@ -25,13 +25,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -258,34 +255,14 @@ public class DoctorController {
     }
 
     @PostMapping("/updateProfile/profile")
-    public String submitProfile(@ModelAttribute Doctor doctor, @RequestParam("profilePicture") MultipartFile profilePicture) throws ExecutionException, InterruptedException, IOException {
+    public String submitProfile(@ModelAttribute Doctor doctor, @RequestParam("profilePicture") String profilePicture) throws ExecutionException, InterruptedException {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
+    MyUserDetails myUserDetails= (MyUserDetails) auth.getPrincipal();
     doctor.setUserId(myUserDetails.getUsername());
-
-    if (!profilePicture.isEmpty()) {
-      
-        byte[] profilePictureBytes = profilePicture.getBytes();
-        String base64EncodedProfilePicture = Base64.getEncoder().encodeToString(profilePictureBytes);
-        doctor.setProfilePicture(base64EncodedProfilePicture);
-    }
-
+    doctor.setProfilePicture(Base64.getEncoder().encodeToString(profilePicture.getBytes()));
     doctorService.updateDoctor(doctor);
     return "redirect:/doctor/updateProfile";
-    }   
-
-@GetMapping("/doctor/profilePicture/{userId}")
-    @ResponseBody
-    public ResponseEntity<Map<String, String>> getProfilePicture(@PathVariable String userId) {
-        // You can customize the URL based on your application structure
-        String imageUrl = "/images/profile/" + userId;
-
-        Map<String, String> responseData = new HashMap<>();
-        responseData.put("profilePictureUrl", imageUrl);
-
-        return ResponseEntity.ok(responseData);
-    }
-
+}
 
 @Autowired
 private SensorDataRepository sensorDataRepository;

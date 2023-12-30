@@ -1,4 +1,4 @@
-package com.SmartHealthRemoteSystem.SHSR.Medicine;
+package com.SmartHealthRemoteSystem.SHSR.ReadSensorData;
 
 import com.SmartHealthRemoteSystem.SHSR.Repository.SHSRDAO;
 import com.SmartHealthRemoteSystem.SHSR.Repository.SubCollectionSHSRDAO;
@@ -24,65 +24,65 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Repository
-public class MedicineRepository implements SHSRDAO<Medicine> {
-    private final String COL_NAME = "Medicine";
+public class SensorDataRepository implements SHSRDAO<SensorData> {
+    private final String COL_NAME = "SensorData";
 
     @Override
-    public Medicine get(String MedId) throws ExecutionException, InterruptedException {
+    public SensorData get(String sensorDataId) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(MedId);
+        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(sensorDataId);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        Medicine tempMedicine;
+        SensorData tempSensorData;
         if (document.exists()) {
-            tempMedicine = document.toObject(Medicine.class);
-            return tempMedicine;
+            tempSensorData = document.toObject(SensorData.class);
+            return tempSensorData;
         } else {
             return null;
         }
     }
 
     @Override
-    public List<Medicine> getAll() throws ExecutionException, InterruptedException {
+    public List<SensorData> getAll() throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        Iterable<DocumentReference> documentReference = dbFirestore.collection(COL_NAME).listDocuments();
+        Iterable<DocumentReference> documentReference = dbFirestore.collection(COL_NAME).document("").collection("SensorDataHistory").listDocuments();
         Iterator<DocumentReference> iterator = documentReference.iterator();
 
-        List<Medicine> medicineList = new ArrayList<>();
-        Medicine medicine;
+        List<SensorData> sensorDataList = new ArrayList<>();
+        SensorData sensorData;
         while (iterator.hasNext()) {
             DocumentReference documentReference1=iterator.next();
             ApiFuture<DocumentSnapshot> future = documentReference1.get();
             DocumentSnapshot document = future.get();
-            medicine = document.toObject(Medicine.class);
-            medicineList.add(medicine);
+            sensorData = document.toObject(SensorData.class);
+            sensorDataList.add(sensorData);
         }
 
-        return medicineList;
+        return sensorDataList;
     }
 
     @Override
-    public String save(Medicine medicine) throws ExecutionException, InterruptedException {
+    public String save(SensorData sensorData) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         //auto create data ID by firebase
         DocumentReference addedDocRef = dbFirestore.collection(COL_NAME).document();
-        medicine.setMedId(addedDocRef.getId());
+        sensorData.setSensorDataId(addedDocRef.getId());
         ApiFuture<WriteResult> collectionsApiFuture =
-                addedDocRef.set(medicine);
-        /* ApiFuture<WriteResult> writeResult = addedDocRef.update("timestamp", collectionsApiFuture.get().getUpdateTime()); */
+                addedDocRef.set(sensorData);
+        ApiFuture<WriteResult> writeResult = addedDocRef.update("timestamp", collectionsApiFuture.get().getUpdateTime());
 
         return addedDocRef.getId();
     }
 
     @Override
-    public String update(Medicine medicine) throws ExecutionException, InterruptedException {
+    public String update(SensorData sensorData) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        DocumentReference addedDocRef = dbFirestore.collection(COL_NAME).document(medicine.getMedId());
+        DocumentReference addedDocRef = dbFirestore.collection(COL_NAME).document(sensorData.getSensorDataId());
         ApiFuture<WriteResult> collectionsApiFuture = null;
-        if(!(medicine.getMedName().isEmpty())){
-            collectionsApiFuture =addedDocRef.update("MedName", medicine.getMedName());
+        if(!(sensorData.getEcgReading() != 0)){
+            collectionsApiFuture =addedDocRef.update("ecgReading", sensorData.getEcgReading());
         }
-        /* if (!(sensorData.getOxygenReading().isEmpty())){
+        if (!(sensorData.getOxygenReading() != 0)){
             collectionsApiFuture =  addedDocRef.update("oxygenReading", sensorData.getOxygenReading());
         }
         if (sensorData.getBodyTemperature() != null){
@@ -94,20 +94,19 @@ public class MedicineRepository implements SHSRDAO<Medicine> {
         if (collectionsApiFuture != null) {
             ApiFuture<WriteResult> writeResult = addedDocRef.update("timestamp", collectionsApiFuture.get().getUpdateTime());
             return writeResult.get().getUpdateTime().toString();
-        } */
+        }
         return Timestamp.now().toString();
     }
 
     @Override
-    public String delete(String MedId) throws ExecutionException, InterruptedException {
+    public String delete(String sensorDataId) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        if(get(MedId) == null){
-            return "The medicine with Id " + MedId + " is not exist.";
+        if(get(sensorDataId) == null){
+            ApiFuture<WriteResult> writeResult = dbFirestore.collection(COL_NAME).document(sensorDataId).delete();
+            return "The sensorData with Id " + sensorDataId + " is not exist.";
+            
         }
-        ApiFuture<WriteResult> writeResult = dbFirestore.collection(COL_NAME).document(MedId).delete();
-        return "Document with medicine id " + MedId + " has been deleted";
+        ApiFuture<WriteResult> writeResult = dbFirestore.collection(COL_NAME).document(sensorDataId).delete();
+        return "Document with Sensor Data Id " + sensorDataId + " has been deleted";
     }
-
-    
 }
-
