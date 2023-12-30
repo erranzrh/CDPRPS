@@ -72,17 +72,36 @@ public class PharmacistController {
         return "updatePharmacistProfile";
     }
 
-    // @GetMapping("/viewMedicineStock")
-    // public String viewMedicineStock(Model model) {
-    //     try {
-    //         List<MedicineStockInfo> medicineStockInfoList = pharmacistService.getMedicineStockInfo();
-    //         model.addAttribute("medicineStockInfoList", medicineStockInfoList);
-    //         return "viewMedicineStock";
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return "error";
-    //     }
-    // }
+    @PostMapping("/updateProfile/profile")
+    public String submitProfile(@ModelAttribute Pharmacist pharmacist, @RequestParam("profilePicture") MultipartFile profilePicture) throws ExecutionException, InterruptedException, IOException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
+    pharmacist.setUserId(myUserDetails.getUsername());
+
+    if (!profilePicture.isEmpty()) {
+      
+        byte[] profilePictureBytes = profilePicture.getBytes();
+        String base64EncodedProfilePicture = Base64.getEncoder().encodeToString(profilePictureBytes);
+        pharmacist.setProfilePicture(base64EncodedProfilePicture);
+    }
+
+    pharmacistService.updatePharmacist(pharmacist);
+    return "redirect:/phamacist/updateProfile";
+    }  
+
+    @GetMapping("/pharmacist/profilePicture/{userId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> getProfilePicture(@PathVariable String userId) {
+        // You can customize the URL based on your application structure
+        String imageUrl = "/images/profile/" + userId;
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("profilePictureUrl", imageUrl);
+
+        return ResponseEntity.ok(responseData);
+    }
+
+    
 
     @GetMapping("/viewMedicineList")
     public String viewMedicineList(Model model) {
