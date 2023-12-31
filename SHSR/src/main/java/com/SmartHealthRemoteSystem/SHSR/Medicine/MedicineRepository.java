@@ -79,11 +79,22 @@ public class MedicineRepository implements SHSRDAO<Medicine> {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference addedDocRef = dbFirestore.collection(COL_NAME).document(medicine.getMedId());
         ApiFuture<WriteResult> collectionsApiFuture = null;
-        
         if(!(medicine.getMedName().isEmpty())){
             collectionsApiFuture =addedDocRef.update("MedName", medicine.getMedName());
         }
-
+        /* if (!(sensorData.getOxygenReading().isEmpty())){
+            collectionsApiFuture =  addedDocRef.update("oxygenReading", sensorData.getOxygenReading());
+        }
+        if (sensorData.getBodyTemperature() != null){
+            collectionsApiFuture = addedDocRef.update("bodyTemperature", sensorData.getBodyTemperature());
+        }
+        if (sensorData.getHeart_Rate() != 0){
+            collectionsApiFuture = addedDocRef.update("Heart_Rate", sensorData.getHeart_Rate());
+        }//mg, ijat, keng, faruq, din
+        if (collectionsApiFuture != null) {
+            ApiFuture<WriteResult> writeResult = addedDocRef.update("timestamp", collectionsApiFuture.get().getUpdateTime());
+            return writeResult.get().getUpdateTime().toString();
+        } */
         return Timestamp.now().toString();
     }
 

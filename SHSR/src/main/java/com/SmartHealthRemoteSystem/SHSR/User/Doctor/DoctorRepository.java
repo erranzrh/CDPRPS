@@ -42,7 +42,6 @@ public class DoctorRepository implements SHSRDAO<Doctor> {
             tempDoctor.setPassword(user.getPassword());
             tempDoctor.setContact(user.getContact());
             tempDoctor.setRole(user.getRole());
-            tempDoctor.setEmail(user.getEmail());
             return tempDoctor;
         } else {
             return null;
@@ -69,7 +68,6 @@ public class DoctorRepository implements SHSRDAO<Doctor> {
             doctor.setName(user.getName());
             doctor.setContact(user.getContact());
             doctor.setRole(user.getRole());
-            doctor.setEmail(user.getEmail());
             doctorList.add(doctor);
         }
 
@@ -88,7 +86,7 @@ public class DoctorRepository implements SHSRDAO<Doctor> {
         tempDoctor.put("profilePicture", doctor.getProfilePicture());
 
         //Create User object and save it to database
-        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole(), doctor.getEmail());
+        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole());
         userRepository.save(user);
 
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(doctor.getUserId()).set(tempDoctor);
@@ -113,7 +111,7 @@ public class DoctorRepository implements SHSRDAO<Doctor> {
     if(!(doctor.getProfilePicture().isEmpty())){
         dbFirestore.collection(COL_NAME).document(doctor.getUserId()).update("profilePicture", doctor.getProfilePicture());
     }
-        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole(), doctor.getEmail());
+        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole());
         return userRepository.update(user);
     }
 

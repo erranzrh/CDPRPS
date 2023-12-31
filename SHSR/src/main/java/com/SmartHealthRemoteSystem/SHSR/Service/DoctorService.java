@@ -28,7 +28,7 @@ public class DoctorService {
     public String createDoctor(Doctor doctor) throws ExecutionException, InterruptedException {
         boolean checkUserExist = false;
         //create a temporary user
-        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole(), doctor.getEmail());
+        User user = new User(doctor.getUserId(), doctor.getName(), doctor.getPassword(), doctor.getContact(), doctor.getRole());
 
         //get list of all user
         List<User> userList = userRepository.getAll();
@@ -53,7 +53,6 @@ public class DoctorService {
     }
   
     public Doctor getDoctor(String doctorId) throws ExecutionException, InterruptedException {
-        
         if(doctorId.isEmpty()){
             return new Doctor();
         }
@@ -67,7 +66,6 @@ public class DoctorService {
             doctor.setContact(user.getContact());
             doctor.setRole(user.getRole());
             doctor.setUserId(user.getUserId());
-            doctor.setEmail(user.getEmail());
             return doctor;
         }
     }
@@ -93,7 +91,6 @@ public class DoctorService {
         }
         return patientList;
     }
-    
     public List<Patient> getListPatient() throws ExecutionException, InterruptedException {
         //function to return list of unassigned patient
         List<Patient> patients=patientRepository.getAll();
