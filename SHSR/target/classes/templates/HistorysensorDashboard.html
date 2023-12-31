@@ -122,7 +122,7 @@
               <!-- will display when sensor data is Exist -->
               <div th:style="${sensorDataList == null} ? 'display: none'" >
                 
-                <form method="post" th:action="@{/patient/savehistory}">
+                <form method="post" th:action="@{/doctor/savehistory}">
 
                   <input type="hidden" th:name="patientid" th:value="${patientid}"/>
                   <button class= "submit btn btn-warning">Save to History</button>
@@ -178,4 +178,4 @@ function hideModal() {
 </script>
 
 </body>
-</html>
+</html>w
