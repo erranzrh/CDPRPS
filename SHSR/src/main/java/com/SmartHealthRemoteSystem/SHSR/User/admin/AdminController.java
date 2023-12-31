@@ -59,8 +59,9 @@ public class AdminController {
         
         return "adminDashboard";
     }
+    
     @GetMapping("/search/patients")
-public String searchPatients(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+    public String searchPatients(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
     List<Patient> patientList = patientService.searchPatients(query);
     PaginationInfo patientPagination = getPaginationInfo(patientList, 1);
 
@@ -70,27 +71,27 @@ public String searchPatients(@RequestParam String query, Model model) throws Exe
     return "adminDashboard :: patientTable"; // Return only the patientTable fragment
 }
 
-@GetMapping("/search/admins")
-public String searchAdmins(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
-    List<User> adminList = userService.searchUsers(query);
-    PaginationInfo adminPagination = getPaginationInfo(adminList, 1);
+// @GetMapping("/search/admins")
+// public String searchAdmins(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+//     List<User> adminList = userService.searchUsers(query);
+//     PaginationInfo adminPagination = getPaginationInfo(adminList, 1);
 
-    model.addAttribute("adminList", adminPagination.getDataToDisplay());
-    model.addAttribute("adminPagination", adminPagination);
+//     model.addAttribute("adminList", adminPagination.getDataToDisplay());
+//     model.addAttribute("adminPagination", adminPagination);
 
-    return "adminDashboard :: adminTable"; // Return only the adminTable
-}
+//     return "adminDashboard :: adminTable"; // Return only the adminTable
+// }
 
-@GetMapping("/search/doctors")
-public String searchDoctors(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
-    List<Doctor> doctorList = doctorService.searchDoctors(query);
-    PaginationInfo doctorPagination = getPaginationInfo(doctorList, 1);
+// @GetMapping("/search/doctors")
+// public String searchDoctors(@RequestParam String query, Model model) throws ExecutionException, InterruptedException {
+//     List<Doctor> doctorList = doctorService.searchDoctors(query);
+//     PaginationInfo doctorPagination = getPaginationInfo(doctorList, 1);
 
-    model.addAttribute("doctorList", doctorPagination.getDataToDisplay());
-    model.addAttribute("doctorPagination", doctorPagination);
+//     model.addAttribute("doctorList", doctorPagination.getDataToDisplay());
+//     model.addAttribute("doctorPagination", doctorPagination);
 
-    return "adminDashboard :: doctorTable"; // Return only the doctorTable
-}
+//     return "adminDashboard :: doctorTable"; // Return only the doctorTable
+// }
 
     @PostMapping("/adduser")
     public String saveUserInformation(@RequestParam(value = "userId") String id,
